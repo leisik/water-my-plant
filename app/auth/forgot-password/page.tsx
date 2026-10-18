@@ -1,11 +1,7 @@
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
 
-export default function Page() {
-  return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <ForgotPasswordForm />
-      </div>
-    </div>
-  );
+export const metadata = { title: "Reset password" };
+
+export default function ForgotPasswordPage() {
+  return <main className="grid min-h-screen place-items-center px-5 py-12"><div className="w-full max-w-md"><ForgotPasswordForm /></div></main>;
 }
