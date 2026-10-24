@@ -46,7 +46,7 @@ export function ConfirmSubmitButton({ message, title = "Confirm deletion", onCli
         className="m-auto w-[calc(100%-2rem)] max-w-md rounded-[1.5rem] border bg-card p-0 text-card-foreground shadow-2xl backdrop:bg-foreground/40 backdrop:backdrop-blur-sm"
       >
         <div className="p-6 text-left sm:p-8">
-          <span className="mb-5 grid size-12 place-items-center rounded-full bg-destructive/10 text-destructive"><Trash2 className="size-5" aria-hidden="true" /></span>
+          <span className="mb-5 grid size-12 place-items-center rounded-full bg-destructive/10 text-destructive dark:text-red-300"><Trash2 className="size-5" aria-hidden="true" /></span>
           <h2 id={`${id}-title`} className="text-2xl font-semibold">{title}</h2>
           <p id={`${id}-message`} className="mt-3 break-words text-sm leading-6 text-muted-foreground">{message}</p>
           <div className="mt-7 flex justify-end gap-3">

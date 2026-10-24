@@ -90,7 +90,7 @@ export function WateringDayButton({ plantId, plantName, date, dateLabel, watered
         {holding && <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1 origin-left animate-[watering-hold_600ms_linear_forwards] bg-primary" />}
         {pending ? <LoaderCircle aria-hidden="true" className="size-5 animate-spin" /> : <span aria-hidden="true">✗</span>}
       </button>
-      {error && <p role="alert" className="absolute bottom-full left-1/2 z-30 mb-1 w-44 -translate-x-1/2 rounded-lg border bg-card p-2 text-xs font-normal text-destructive shadow-md">{error}</p>}
+      {error && <p role="alert" className="absolute bottom-full left-1/2 z-30 mb-1 w-44 -translate-x-1/2 rounded-lg border bg-card p-2 text-xs font-normal text-destructive shadow-md dark:text-red-300">{error}</p>}
     </div>
   );
 }

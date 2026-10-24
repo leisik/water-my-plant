@@ -13,6 +13,7 @@ A private, mobile-first plant watering journal built with Next.js, TypeScript, T
 - Row Level Security for plants, watering events, and Storage objects
 - Europe/Warsaw date and time display
 - Loading, empty, error, and success states
+- Light, dark, and system themes with a saved device preference
 
 ## Requirements
 

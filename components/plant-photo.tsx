@@ -6,7 +6,7 @@ import { useState } from "react";
 export function PlantPhoto({ src, alt, className = "aspect-[4/3]" }: { src: string | null; alt: string; className?: string }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
-    return <div className={`${className} grid w-full place-items-center bg-gradient-to-br from-[#dce8d9] to-[#f1ead9] text-primary/60`}><Sprout className="size-14" aria-hidden="true" /><span className="sr-only">No photo for {alt}</span></div>;
+    return <div className={`${className} grid w-full place-items-center bg-gradient-to-br from-accent to-secondary text-primary/60`}><Sprout className="size-14" aria-hidden="true" /><span className="sr-only">No photo for {alt}</span></div>;
   }
   return (
     <div className={`${className} relative w-full overflow-hidden bg-muted`}>
