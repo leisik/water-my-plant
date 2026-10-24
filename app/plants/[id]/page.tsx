@@ -3,6 +3,7 @@ import { ConfirmSubmitButton } from "@/components/confirm-submit-button";
 import { FlashMessage } from "@/components/flash-message";
 import { PastWateringForm } from "@/components/past-watering-form";
 import { PlantPhoto } from "@/components/plant-photo";
+import { WateringCalendar } from "@/components/watering-calendar";
 import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import { requireUser } from "@/lib/auth";
@@ -41,20 +42,26 @@ export default async function PlantDetailPage({ params }: { params: Promise<{ id
         </div>
       </section>
 
-      <section className="mx-auto mt-10 max-w-3xl">
+      <section className="mt-10">
         <div className="mb-5 flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-accent text-primary"><History className="size-5" /></span><div><h2 className="text-2xl font-semibold">Watering history</h2><p className="text-sm text-muted-foreground">{events.length} {events.length === 1 ? "watering" : "waterings"} recorded</p></div></div>
+        {error ? <p className="mb-7 rounded-2xl border bg-card p-5 text-sm text-muted-foreground">Watering calendar unavailable. Please try again.</p> : <WateringCalendar events={events} />}
+        <div className="mx-auto max-w-3xl">
         <PastWateringForm plantId={id} />
+        <details className="mt-5">
+          <summary className="cursor-pointer rounded-lg py-2 text-sm font-medium text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">All watering records ({events.length})</summary>
         {events.length ? (
           <ol className="mt-5 overflow-hidden rounded-2xl border bg-card">
             {events.map((event, index) => (
               <li key={event.id} className="flex items-center gap-4 border-b px-4 py-4 last:border-0 sm:px-5">
                 <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-primary"><Droplets className="size-4" /></span>
                 <div className="min-w-0 flex-1"><p className="font-medium">{formatDateTime(event.watered_at)}</p>{index === 0 && <p className="text-xs font-medium text-primary">Most recent</p>}</div>
-                <form action={deleteWateringAction.bind(null, id, event.id)}><ConfirmSubmitButton variant="ghost" size="icon" message="Delete this watering event? This cannot be undone." aria-label={`Delete watering from ${formatDateTime(event.watered_at)}`}><Trash2 className="text-muted-foreground" /></ConfirmSubmitButton></form>
+                <form action={deleteWateringAction.bind(null, id, event.id)}><ConfirmSubmitButton variant="ghost" size="icon" title="Delete watering?" message={`Delete the watering recorded on ${formatDateTime(event.watered_at)}? This cannot be undone.`} aria-label={`Delete watering from ${formatDateTime(event.watered_at)}`}><Trash2 className="text-muted-foreground" /></ConfirmSubmitButton></form>
               </li>
             ))}
           </ol>
         ) : <div className="mt-5 rounded-2xl border border-dashed bg-card/60 px-5 py-10 text-center text-sm text-muted-foreground">No waterings recorded yet. Use “Water now” or add a past watering above.</div>}
+        </details>
+        </div>
       </section>
     </>
   );

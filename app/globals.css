@@ -51,3 +51,8 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 }
+
+@keyframes watering-hold {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

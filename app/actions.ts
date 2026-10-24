@@ -1,6 +1,6 @@
 "use server";
 
-import { warsawLocalDateTimeToIso } from "@/lib/dates";
+import { recentWateringDays, warsawDateKey, warsawLocalDateTimeToIso } from "@/lib/dates";
 import {
   PHOTO_BUCKET,
   photoExtension,
@@ -167,6 +167,36 @@ export async function addPastWateringAction(plantId: string, formData: FormData)
   revalidatePath("/plants");
   revalidatePath(`/plants/${plantId}`);
   await redirectWithFlash(`/plants/${plantId}`, "success", "Past watering added.");
+}
+
+export async function recordWateringDayAction(plantId: string, date: string) {
+  const { supabase, user } = await requireUser();
+  const now = new Date();
+  if (!recentWateringDays(now).some((day) => day.key === date)) {
+    return { error: "Choose a date within the last 10 days. Refresh the page and try again." };
+  }
+
+  const { data: plant, error: plantError } = await supabase.from("plants")
+    .select("id").eq("id", plantId).eq("user_id", user.id).maybeSingle();
+  if (plantError || !plant) return { error: "Unable to find this plant. Refresh the page and try again." };
+
+  const start = warsawLocalDateTimeToIso(`${date}T00:00`)!;
+  const nextDay = new Date(`${date}T12:00:00Z`);
+  nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+  const end = warsawLocalDateTimeToIso(`${warsawDateKey(nextDay)}T00:00`)!;
+  const { data: existing, error: lookupError } = await supabase.from("watering_events")
+    .select("id").eq("plant_id", plantId).gte("watered_at", start).lt("watered_at", end).limit(1);
+  if (lookupError) return { error: "Unable to check watering history. Please try again." };
+
+  if (!existing?.length) {
+    // Use the actual time today, or noon in Warsaw for a backdated calendar entry.
+    const wateredAt = date === warsawDateKey(now) ? now.toISOString() : warsawLocalDateTimeToIso(`${date}T12:00`)!;
+    const { error } = await supabase.from("watering_events").insert({ plant_id: plantId, watered_at: wateredAt });
+    if (error) return { error: "Unable to save watering. Please try again." };
+  }
+  revalidatePath("/plants");
+  revalidatePath(`/plants/${plantId}`);
+  return { error: null };
 }
 
 export async function deleteWateringAction(plantId: string, eventId: string) {
