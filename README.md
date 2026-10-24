@@ -55,8 +55,9 @@ A private, mobile-first plant watering journal built with Next.js, TypeScript, T
 
    - Site URL: `http://localhost:3000` for local development
    - Redirect URL: `http://localhost:3000/auth/callback`
+   - Password reset redirect URL: `http://localhost:3000/auth/callback?next=/auth/update-password`
 
-   Add the production callback URL later, for example `https://your-app.vercel.app/auth/callback`.
+   Add the production callback and password reset redirect URLs later, replacing `http://localhost:3000` with your production origin. The password reset entry must include `?next=/auth/update-password`, matching the URL sent by the app. Keep the Reset Password email template's link set to `{{ .ConfirmationURL }}` so Supabase verifies the recovery link before redirecting to the app.
 
 6. Create or invite users from **Authentication → Users**, then disable **Allow new users to sign up**. The authorization trigger automatically adds every Auth user to the private allowlist. If an account does not have a password yet, open `/auth/forgot-password` locally and use the one-time recovery email to set one. Normal sign-ins use the password and do not send an email.
 
@@ -97,7 +98,7 @@ Sign-in uses Supabase email/password authentication and cookie-backed sessions. 
 2. Import it into Vercel as a Next.js project.
 3. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in **Vercel → Project Settings → Environment Variables** for Production and Preview as appropriate.
 4. Deploy.
-5. Add `https://your-production-domain/auth/callback` to Supabase's allowed redirect URLs and change the Supabase Site URL to the production origin.
+5. Add `https://your-production-domain/auth/callback` and `https://your-production-domain/auth/callback?next=/auth/update-password` to Supabase's allowed redirect URLs and change the Supabase Site URL to the production origin.
 6. Test sign-in, photo upload, watering creation, and deletion with the authorized account.
 
 No Vercel or Supabase credentials are committed to source control. `.env.local` is ignored by Git.
